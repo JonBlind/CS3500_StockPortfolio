@@ -259,6 +259,10 @@ public class StockView implements StockViewInterface {
     out.println("You Cannot Rebalance Before The Last Chronological Transaction!");
   }
 
+  public void printRebalanceWarning() {
+    out.println("Rebalancing Will Buy/Sell Stocks Up To 3 Decimal Places!");
+  }
+
   /**
    * Prints out to ask user to input date.
    */

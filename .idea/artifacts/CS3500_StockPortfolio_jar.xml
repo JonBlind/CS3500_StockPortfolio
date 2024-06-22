@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="CS3500_StockPortfolio:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CS3500_StockPortfolio_jar</output-path>
+    <root id="archive" name="CS3500_StockPortfolio.jar">
+      <element id="module-output" name="CS3500_StockPortfolio" />
+    </root>
+  </artifact>
+</component>

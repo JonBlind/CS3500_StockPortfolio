@@ -124,7 +124,7 @@ public class StockPortfolioTest {
     System.out.println("Before rebalance:");
     for (String symbol : portfolio.getStockNames()) {
       Share share = portfolio.getShare(symbol);
-      System.out.println(symbol + ": " + share.getQuantity() +
+      System.out.println(symbol + ": " + share.getQuantityOnDate("2024-06-05") +
               " shares at $" + share.getPriceOnDate("2024-06-05") +
               " each on 2024-06-05. Total value: $" + share.getValueOnDate("2024-06-05"));
       System.out.println("History: " + share.getHistory());
@@ -134,25 +134,26 @@ public class StockPortfolioTest {
     portfolio.rebalance("2024-06-05", targetDistribution);
 
     System.out.println("After rebalance:");
+
     for (String symbol : portfolio.getStockNames()) {
       Share share = portfolio.getShare(symbol);
-      System.out.println(symbol + ": " + share.getQuantity() +
+      System.out.println(symbol + ": " + share.getQuantityOnDate("2024-06-05") +
               " shares at $" + share.getPriceOnDate("2024-06-05") +
               " each on 2024-06-05. Total value: $" + share.getValueOnDate("2024-06-05"));
       System.out.println("History: " + share.getHistory());
     }
 
     // Check the rebalanced quantities
-    assertEquals(18, portfolio.getShare("NFLX").getQuantity(), 0.01);
-    assertEquals(9, portfolio.getShare("GOOGL").getQuantity(), 0.01);
-    assertEquals(27, portfolio.getShare("MSFT").getQuantity(), 0.01);
-    assertEquals(9, portfolio.getShare("AAPL").getQuantity(), 0.01);
+    assertEquals(17.917, portfolio.getShare("NFLX").getQuantity(), 0.001);
+    assertEquals(8.958, portfolio.getShare("GOOGL").getQuantity(), 0.001);
+    assertEquals(26.875, portfolio.getShare("MSFT").getQuantity(), 0.001);
+    assertEquals(8.958, portfolio.getShare("AAPL").getQuantity(), 0.001);
 
     // Check the rebalanced values
-    assertEquals(270.0, portfolio.getShare("NFLX").getValueOnDate("2024-06-05"), 0.01);
-    assertEquals(270.0, portfolio.getShare("GOOGL").getValueOnDate("2024-06-05"), 0.01);
-    assertEquals(270.0, portfolio.getShare("MSFT").getValueOnDate("2024-06-05"), 0.01);
-    assertEquals(270.0, portfolio.getShare("AAPL").getValueOnDate("2024-06-05"), 0.01);
+    assertEquals(268.755, portfolio.getShare("NFLX").getValueOnDate("2024-06-05"), 0.01);
+    assertEquals(268.75, portfolio.getShare("GOOGL").getValueOnDate("2024-06-05"), 0.01);
+    assertEquals(268.75, portfolio.getShare("MSFT").getValueOnDate("2024-06-05"), 0.01);
+    assertEquals(268.74, portfolio.getShare("AAPL").getValueOnDate("2024-06-05"), 0.01);
   }
 
   @Test
@@ -198,16 +199,16 @@ public class StockPortfolioTest {
     }
 
     // Check the rebalanced quantities
-    assertEquals(29, portfolio.getShare("NFLX").getQuantity(), 0.01);
-    assertEquals(7, portfolio.getShare("GOOGL").getQuantity(), 0.01);
-    assertEquals(22, portfolio.getShare("MSFT").getQuantity(), 0.01);
-    assertEquals(7, portfolio.getShare("AAPL").getQuantity(), 0.01);
+    assertEquals(28.667, portfolio.getShare("NFLX").getQuantity(), 0.01);
+    assertEquals(7.167, portfolio.getShare("GOOGL").getQuantity(), 0.01);
+    assertEquals(21.5, portfolio.getShare("MSFT").getQuantity(), 0.01);
+    assertEquals(7.167, portfolio.getShare("AAPL").getQuantity(), 0.01);
 
     // Check the rebalanced values
-    assertEquals(435, portfolio.getShare("NFLX").getValueOnDate("2024-06-03"), 0.01);
-    assertEquals(210, portfolio.getShare("GOOGL").getValueOnDate("2024-06-03"), 0.01);
-    assertEquals(220, portfolio.getShare("MSFT").getValueOnDate("2024-06-03"), 0.01);
-    assertEquals(210, portfolio.getShare("AAPL").getValueOnDate("2024-06-03"), 0.01);
+    assertEquals(430, portfolio.getShare("NFLX").getValueOnDate("2024-06-03"), 0.01);
+    assertEquals(215, portfolio.getShare("GOOGL").getValueOnDate("2024-06-03"), 0.01);
+    assertEquals(215, portfolio.getShare("MSFT").getValueOnDate("2024-06-03"), 0.01);
+    assertEquals(215, portfolio.getShare("AAPL").getValueOnDate("2024-06-03"), 0.01);
   }
 
   @Test(expected = IllegalArgumentException.class)

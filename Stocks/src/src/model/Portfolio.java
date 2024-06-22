@@ -2,6 +2,8 @@ package src.model;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -314,25 +316,28 @@ public class Portfolio {
     double portfolioTotalValue = getPortfolioValue(date);
     System.out.println("Portfolio total value on " + date + ": " + portfolioTotalValue);
 
-    Map<String, Double> targetValues = new HashMap<>();
-    Map<String, Double> buySellShares = new HashMap<>();
+    Map<String, BigDecimal> targetValues = new HashMap<>();
+    Map<String, BigDecimal> buySellShares = new HashMap<>();
 
     for (String symbol : shares.keySet()) {
-      double targetValue = portfolioTotalValue * desiredDistribution.getOrDefault(symbol, 0.0);
+      BigDecimal targetValue = BigDecimal.valueOf(portfolioTotalValue)
+              .multiply(BigDecimal.valueOf(desiredDistribution
+                      .getOrDefault(symbol, 0.0)));
       targetValues.put(symbol, targetValue);
       System.out.println("Target value for " + symbol + ": " + targetValue);
     }
 
     for (String symbol : shares.keySet()) {
       Share share = shares.get(symbol);
-      double currentValue = share.getValueOnDate(date);
-      double targetValue = targetValues.get(symbol);
-      double difference = targetValue - currentValue;
-      double priceOnDate = share.getPriceOnDate(date);
-      double sharesToTrade = Math.round(difference / priceOnDate);
+      BigDecimal currentValue = BigDecimal.valueOf(share.getValueOnDate(date));
+      BigDecimal targetValue = targetValues.get(symbol);
+      BigDecimal difference = targetValue.subtract(currentValue);
+      BigDecimal priceOnDate = BigDecimal.valueOf(share.getPriceOnDate(date));
+      BigDecimal sharesToTrade = difference.divide(priceOnDate, 3, RoundingMode.HALF_UP);
 
-      if (share.getQuantityOnDate(date) + sharesToTrade < 0) {
-        sharesToTrade = -share.getQuantityOnDate(date);
+      if (BigDecimal.valueOf(share.getQuantityOnDate(date)).add(sharesToTrade)
+              .compareTo(BigDecimal.ZERO) < 0) {
+        sharesToTrade = BigDecimal.valueOf(-share.getQuantityOnDate(date));
       }
 
       buySellShares.put(symbol, sharesToTrade);
@@ -343,14 +348,16 @@ public class Portfolio {
     }
 
     for (String symbol : buySellShares.keySet()) {
-      double sharesToTrade = buySellShares.get(symbol);
-      shares.get(symbol).updateQuantity(sharesToTrade, date);
+      BigDecimal sharesToTrade = buySellShares.get(symbol);
+      shares.get(symbol).updateQuantity(sharesToTrade.doubleValue(), date);
 
-      String actionType = sharesToTrade > 0 ? "BUY" : "SELL";
-      history.add(actionType + ";" + symbol + ";" + Math.abs(sharesToTrade) + ";" + date);
+      String actionType = sharesToTrade.compareTo(BigDecimal.ZERO) > 0 ? "BUY" : "SELL";
+      history.add(actionType + ";" + symbol + ";" + sharesToTrade
+              .setScale(3, RoundingMode.HALF_UP) + ";" + date);
       shares.get(symbol).addToHistory(date, shares.get(symbol).getQuantity());
 
-      System.out.println(actionType + " " + Math.abs(sharesToTrade) + " shares of " + symbol + " on " + date);
+      System.out.println(actionType + " " + sharesToTrade.abs()
+              .setScale(3, RoundingMode.HALF_UP) + " shares of " + symbol + " on " + date);
     }
 
     System.out.println("Rebalance completed for date: " + date);

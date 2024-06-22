@@ -269,6 +269,7 @@ public class StockController implements StockControllerInterface {
    * Handles rebalancing the portfolio.
    */
   private void handleRebalance() {
+    view.printRebalanceWarning();
     view.printSpecifyDate();
     view.printMustBeChronological();
     String date = handleDate();

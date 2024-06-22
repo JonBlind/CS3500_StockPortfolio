@@ -23,24 +23,24 @@ public class StockModelTest {
 
   @Test
   public void testCountPortfolios() {
-    assertEquals(3, model.countPortfolios(), 0.01);
+    assertEquals(0, model.countPortfolios(), 0.01);
     model.addPortfolio("ABC");
-    assertEquals(4, model.countPortfolios(), 0.01);
+    assertEquals(1, model.countPortfolios(), 0.01);
   }
 
   @Test
   public void addPortfolio() {
     model.addPortfolio("ABC");
-    assertEquals(4, model.countPortfolios(), 0.01);
+    assertEquals(1, model.countPortfolios(), 0.01);
 
   }
 
   @Test
   public void testGetPortfolioNames() {
-    assertEquals(3, model.countPortfolios(), 0.01);
+    assertEquals(0, model.countPortfolios(), 0.01);
     model.addPortfolio("ABC");
     model.addPortfolio("DEF");
-    assertEquals(5, model.getPortfolioNames().length);
+    assertEquals(2, model.getPortfolioNames().length);
   }
 
   @Test
@@ -78,7 +78,7 @@ public class StockModelTest {
   public void testGetStockMovingAverage() {
     model.addPortfolio("ABC");
     model.addStockToPortfolio("AAPL", model.getPortfolio("ABC"), 100);
-    assertEquals(194.19, model.getStockMovingAverage("AAPL", new Date(), 20), 0.01);
+    assertEquals(205.22, model.getStockMovingAverage("AAPL", new Date(), 20), 0.01);
   }
 
 

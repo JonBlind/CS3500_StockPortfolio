@@ -60,6 +60,7 @@ public class Share {
 
   public void purchase(int quantity) {
     this.quantity += quantity;
+    this.date = DateFormat.toString(new Date());
     this.history.put(this.date, this.quantity);
   }
 
@@ -85,6 +86,7 @@ public class Share {
       throw new IllegalArgumentException("Cannot sell more than you have");
     }
     this.quantity -= quantity;
+    this.date = DateFormat.toString(new Date());
     this.history.put(this.date, this.quantity);
   }
 
@@ -189,7 +191,7 @@ public class Share {
     // loop over all the keys in the map
     for (String key : history.keySet()) {
       Date historyDate = DateFormat.toDate(key);
-      if (historyDate.before(targetDate)) {
+      if (historyDate.equals(targetDate) || historyDate.before(targetDate)) {
         if (closestDate == null || historyDate.after(closestDate)) {
           closestDate = historyDate;
           closestQuantity = history.get(key);
